@@ -1,0 +1,81 @@
+.traffic-light-container {
+  position: relative;
+}
+
+.traffic-light-status {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.traffic-light-status.red {
+  color: #e74c3c;
+}
+
+.traffic-light-status.green {
+  color: #2ecc71;
+  animation: greenGlow 2s infinite;
+}
+
+.traffic-light-status.yellow {
+  color: #f1c40f;
+}
+
+@keyframes greenGlow {
+  0%,
+  100% {
+    text-shadow: 0 0 5px #2ecc71;
+  }
+  50% {
+    text-shadow: 0 0 15px #2ecc71;
+  }
+}
+
+.timer-display {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(44, 62, 80, 0.9);
+  color: #ecf0f1;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.8rem;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+.light-beam {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    transparent 0deg,
+    currentColor 20deg,
+    transparent 40deg
+  );
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+.light-beam.red {
+  color: #e74c3c;
+}
+
+.light-beam.green {
+  color: #2ecc71;
+}

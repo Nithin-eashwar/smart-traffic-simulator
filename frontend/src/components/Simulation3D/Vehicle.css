@@ -1,0 +1,63 @@
+.vehicle-container {
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+.vehicle-label {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.vehicle-container:hover .vehicle-label {
+  opacity: 1;
+}
+
+.vehicle-emergency {
+  animation: emergencyFlash 0.5s infinite;
+}
+
+@keyframes emergencyFlash {
+  0%,
+  100% {
+    filter: brightness(1);
+    box-shadow: 0 0 5px #ff0000;
+  }
+  50% {
+    filter: brightness(1.5);
+    box-shadow: 0 0 20px #ff0000;
+  }
+}
+
+.vehicle-waiting {
+  animation: waitingPulse 2s infinite;
+}
+
+@keyframes waitingPulse {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.2);
+  }
+}
+
+.vehicle-type-icon {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.8rem;
+  opacity: 0.8;
+}

@@ -1,0 +1,221 @@
+.metrics-panel {
+  height: 100%;
+  overflow-y: auto;
+  padding: 20px;
+  background: rgba(25, 42, 56, 0.95);
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid rgba(52, 152, 219, 0.3);
+}
+
+.panel-header h2 {
+  font-size: 1.5rem;
+  margin: 0;
+  background: linear-gradient(45deg, #00b4db, #0083b0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.health-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.health-score {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.health-status {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.charts-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.chart-container {
+  background: rgba(44, 62, 80, 0.8);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.chart-container.full-width {
+  grid-column: 1 / -1;
+}
+
+.alerts-section {
+  margin-bottom: 25px;
+}
+
+.stakeholder-section {
+  margin-bottom: 20px;
+}
+
+.stakeholder-section h3 {
+  color: #ecf0f1;
+  font-size: 1.2rem;
+  margin: 0 0 15px 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stakeholder-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.stakeholder-card {
+  background: rgba(44, 62, 80, 0.8);
+  border-radius: 10px;
+  padding: 15px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.stakeholder-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.stakeholder-card.police {
+  border-left: 4px solid #3498db;
+}
+
+.stakeholder-card.emergency {
+  border-left: 4px solid #e74c3c;
+}
+
+.stakeholder-card.commuters {
+  border-left: 4px solid #2ecc71;
+}
+
+.stakeholder-card.environment {
+  border-left: 4px solid #1abc9c;
+}
+
+.stakeholder-icon {
+  font-size: 1.8rem;
+  background: rgba(255, 255, 255, 0.1);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stakeholder-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.stakeholder-content h4 {
+  color: #ecf0f1;
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+}
+
+.stakeholder-content p {
+  color: #bdc3c7;
+  font-size: 0.85rem;
+  margin: 0 0 10px 0;
+  line-height: 1.3;
+}
+
+.impact-meter {
+  margin-top: 10px;
+}
+
+.meter-fill {
+  height: 6px;
+  background: linear-gradient(90deg, #3498db, #2ecc71);
+  border-radius: 3px;
+  margin-bottom: 5px;
+  transition: width 0.3s ease;
+}
+
+.impact-meter span {
+  font-size: 0.8rem;
+  color: #7f8c8d;
+  display: block;
+  text-align: right;
+}
+
+/* Scrollbar styling */
+.metrics-panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.metrics-panel::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.metrics-panel::-webkit-scrollbar-thumb {
+  background: rgba(52, 152, 219, 0.5);
+  border-radius: 4px;
+}
+
+.metrics-panel::-webkit-scrollbar-thumb:hover {
+  background: rgba(52, 152, 219, 0.7);
+}
+
+@media (max-width: 1200px) {
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stakeholder-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .metrics-panel {
+    padding: 15px;
+  }
+
+  .panel-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .health-indicator {
+    align-self: stretch;
+    align-items: flex-start;
+  }
+}

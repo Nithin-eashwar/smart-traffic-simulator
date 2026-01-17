@@ -1,0 +1,177 @@
+.metric-card {
+  background: rgba(44, 62, 80, 0.8);
+  border-left: 4px solid;
+  border-radius: 10px;
+  padding: 15px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  height: 140px;
+  display: flex;
+  flex-direction: column;
+}
+
+.metric-card:hover {
+  background: rgba(44, 62, 80, 1);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.metric-card:hover::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--border-color, #3498db), transparent);
+}
+
+.metric-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.metric-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.metric-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.metric-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #ecf0f1;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.metric-trend {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.trend-value {
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 2px 8px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.trend-value.positive {
+  background: rgba(46, 204, 113, 0.2);
+  color: #2ecc71;
+}
+
+.trend-value.negative {
+  background: rgba(231, 76, 60, 0.2);
+  color: #e74c3c;
+}
+
+.trend-value.neutral {
+  background: rgba(149, 165, 166, 0.2);
+  color: #95a5a6;
+}
+
+.metric-value-container {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  margin-bottom: 10px;
+  margin-top: auto;
+}
+
+.metric-value {
+  font-size: 1.8rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.metric-unit {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  font-weight: 500;
+}
+
+.metric-description {
+  font-size: 0.75rem;
+  color: #bdc3c7;
+  margin-bottom: 10px;
+  line-height: 1.2;
+  flex-shrink: 0;
+}
+
+.metric-progress {
+  margin-top: auto;
+}
+
+.progress-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: var(--progress-width, 0%);
+  background: linear-gradient(
+    90deg,
+    var(--progress-color, #3498db),
+    var(--progress-color, #3498db)
+  );
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+.progress-fill::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 20px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--progress-color, #3498db)
+  );
+  opacity: 0.5;
+}
+
+@media (max-width: 768px) {
+  .metric-card {
+    height: 130px;
+    padding: 12px;
+  }
+
+  .metric-value {
+    font-size: 1.5rem;
+  }
+
+  .metric-label {
+    font-size: 0.85rem;
+  }
+}

@@ -1,0 +1,330 @@
+.road-controls {
+  padding: 10px 0;
+}
+
+.road-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.road-header h3 {
+  color: #1abc9c;
+  margin: 0 0 5px 0;
+  font-size: 1.3rem;
+}
+
+.road-subtitle {
+  color: #bdc3c7;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.road-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.road-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.road-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.road-list::-webkit-scrollbar-thumb {
+  background: rgba(26, 188, 156, 0.5);
+  border-radius: 3px;
+}
+
+.road-item {
+  background: rgba(52, 73, 94, 0.8);
+  border-left: 4px solid;
+  border-radius: 8px;
+  padding: 15px;
+  transition: all 0.3s ease;
+}
+
+.road-item:hover {
+  background: rgba(52, 73, 94, 1);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.road-item.active {
+  background: rgba(46, 204, 113, 0.1);
+  box-shadow: 0 0 20px rgba(46, 204, 113, 0.2);
+}
+
+.road-info {
+  margin-bottom: 15px;
+}
+
+.road-name-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.road-name {
+  color: #ecf0f1;
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.road-lanes {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lane-count {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  color: #bdc3c7;
+}
+
+.active-indicator {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(46, 204, 113, 0.2);
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+.active-pulse {
+  width: 8px;
+  height: 8px;
+  background: #2ecc71;
+  border-radius: 50%;
+  animation: pulse 1s infinite;
+}
+
+.active-indicator span {
+  font-size: 0.8rem;
+  color: #2ecc71;
+  font-weight: bold;
+}
+
+.road-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 12px;
+  border-radius: 6px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: #7f8c8d;
+}
+
+.stat-value {
+  font-weight: bold;
+  color: #ecf0f1;
+  font-size: 1rem;
+}
+
+.stat-value.congestion {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.road-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.road-actions .action-btn {
+  flex: 1;
+  padding: 10px;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.action-btn.priority {
+  background: rgba(52, 152, 219, 0.3);
+  border-color: #3498db;
+}
+
+.action-btn.clear {
+  background: rgba(231, 76, 60, 0.3);
+  border-color: #e74c3c;
+}
+
+.action-btn.add {
+  background: rgba(46, 204, 113, 0.3);
+  border-color: #2ecc71;
+}
+
+.road-progress {
+  margin-top: 10px;
+}
+
+.progress-bar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+
+.progress-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+  border-radius: 4px;
+}
+
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #7f8c8d;
+}
+
+.global-controls {
+  background: rgba(52, 73, 94, 0.6);
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.global-controls h4 {
+  color: #ecf0f1;
+  margin: 0 0 15px 0;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.global-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.global-btn {
+  background: rgba(52, 152, 219, 0.2);
+  border: 1px solid rgba(52, 152, 219, 0.3);
+  color: #ecf0f1;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.global-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.global-btn.clear-all {
+  background: rgba(231, 76, 60, 0.3);
+  border-color: #e74c3c;
+}
+
+.global-btn.reset-all {
+  background: rgba(241, 196, 15, 0.3);
+  border-color: #f1c40f;
+}
+
+.global-btn.optimize {
+  background: rgba(46, 204, 113, 0.3);
+  border-color: #2ecc71;
+}
+
+.road-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  background: rgba(52, 73, 94, 0.6);
+  border-radius: 8px;
+  padding: 15px;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.summary-icon {
+  font-size: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.summary-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.summary-value {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ecf0f1;
+}
+
+.summary-label {
+  font-size: 0.8rem;
+  color: #7f8c8d;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+}
+
+@media (max-width: 768px) {
+  .road-stats {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .road-actions {
+    flex-direction: column;
+  }
+
+  .global-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .road-summary {
+    grid-template-columns: 1fr;
+  }
+}
