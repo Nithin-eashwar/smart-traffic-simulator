@@ -18,6 +18,14 @@ function App() {
   // Handle quick actions from sidebar
   const handleQuickAction = async (action) => {
     switch (action) {
+      case "start":
+        try {
+          await simulationService.controlSimulation("start");
+          console.log("Simulation started");
+        } catch (err) {
+          console.error("Failed to start:", err);
+        }
+        break;
       case "emergency":
         // Add emergency to a random direction
         const directions = [0, 45, 90, 135, 180, 225, 270, 315];
@@ -255,16 +263,9 @@ function App() {
 
       <footer className="app-footer">
         <div className="footer-info">
-          <span>Smart Traffic Control System v1.0</span>
-          <span>•</span>
-          <span>8-Way Intersection Simulation</span>
-          <span>•</span>
-          <span>Priority Queue Algorithm</span>
-          <span>•</span>
           <span
-            className={`connection-status ${
-              isConnected ? "connected" : "disconnected"
-            }`}
+            className={`connection-status ${isConnected ? "connected" : "disconnected"
+              }`}
           >
             {isConnected ? "🟢 LIVE" : "🔴 OFFLINE"}
           </span>

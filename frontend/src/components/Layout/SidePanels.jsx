@@ -11,6 +11,7 @@ const SidePanels = ({ collapsed, onToggle, activeView, onViewChange, onQuickActi
   ];
 
   const quickActions = [
+    { id: "start", icon: "▶️", label: "Start Sim", color: "#27ae60" },
     { id: "emergency", icon: "🚨", label: "Add Emergency", color: "#e74c3c" },
     { id: "pause", icon: "⏸️", label: "Pause Sim", color: "#f39c12" },
     { id: "reset", icon: "🔁", label: "Reset Sim", color: "#3498db" },
@@ -64,9 +65,8 @@ const SidePanels = ({ collapsed, onToggle, activeView, onViewChange, onQuickActi
               {navigationItems.map((item) => (
                 <li key={item.id}>
                   <button
-                    className={`nav-item ${
-                      activeView === item.id ? "active" : ""
-                    }`}
+                    className={`nav-item ${activeView === item.id ? "active" : ""
+                      }`}
                     onClick={() => handleNavigationClick(item.id)}
                   >
                     <span className="nav-icon">{item.icon}</span>
