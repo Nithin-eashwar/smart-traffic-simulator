@@ -2,14 +2,69 @@ import React, { useState } from "react";
 import { formatSimulationTime } from "../../utils/calculations";
 import "./SimulationControls.css";
 
+// Preset configurations for each simulation mode
+const modePresets = {
+  smart: {
+    greenDuration: 30,
+    vehicleRate: 5,
+    emergencyProbability: 2,
+    simulationSpeed: 1,
+  },
+  fixed: {
+    greenDuration: 45,
+    vehicleRate: 8,
+    emergencyProbability: 3,
+    simulationSpeed: 1,
+  },
+  manual: {
+    greenDuration: 30,
+    vehicleRate: 3,
+    emergencyProbability: 1,
+    simulationSpeed: 1,
+  },
+  rush: {
+    greenDuration: 20,
+    vehicleRate: 18,
+    emergencyProbability: 5,
+    simulationSpeed: 2,
+  },
+};
+
+// Preset configurations for scenario presets
+const scenarioPresets = {
+  night: {
+    greenDuration: 40,
+    vehicleRate: 2,
+    emergencyProbability: 1,
+    simulationSpeed: 1,
+  },
+  accident: {
+    greenDuration: 25,
+    vehicleRate: 12,
+    emergencyProbability: 8,
+    simulationSpeed: 1,
+  },
+  parade: {
+    greenDuration: 50,
+    vehicleRate: 4,
+    emergencyProbability: 3,
+    simulationSpeed: 1,
+  },
+};
+
 const SimulationControls = ({
   config,
   onConfigUpdate,
   onSimulationControl,
+  onModeChange,
   simulationTime,
+  simulationMode: propMode,
 }) => {
-  const [simulationMode, setSimulationMode] = useState("smart");
+  const [localMode, setLocalMode] = useState(propMode || "smart");
   const [isPaused, setIsPaused] = useState(false);
+
+  // Use prop mode if provided, otherwise use local state
+  const simulationMode = propMode !== undefined ? propMode : localMode;
 
   const modes = [
     {
@@ -55,8 +110,26 @@ const SimulationControls = ({
   };
 
   const handleModeChange = (modeId) => {
-    setSimulationMode(modeId);
-    console.log("Simulation mode changed to:", modeId);
+    setLocalMode(modeId);
+    const preset = modePresets[modeId];
+    
+    // Notify parent component about mode change with preset
+    if (onModeChange) {
+      onModeChange(modeId, preset);
+    }
+    
+    console.log("Simulation mode changed to:", modeId, "with preset:", preset);
+  };
+
+  const handleScenarioChange = (scenarioId) => {
+    const preset = scenarioPresets[scenarioId];
+    
+    // Apply scenario preset using the same mechanism as mode change
+    if (onModeChange) {
+      onModeChange(scenarioId, preset);
+    }
+    
+    console.log("Scenario preset applied:", scenarioId, "with config:", preset);
   };
 
   return (
@@ -216,10 +289,24 @@ const SimulationControls = ({
       <div className="control-section">
         <h4>Scenario Presets</h4>
         <div className="scenario-buttons">
-          <button className="scenario-btn rush-hour">🏃 Rush Hour</button>
-          <button className="scenario-btn night">🌙 Night Mode</button>
-          <button className="scenario-btn accident">🚧 Accident</button>
-          <button className="scenario-btn parade">🎉 Parade</button>
+          <button 
+            className="scenario-btn night"
+            onClick={() => handleScenarioChange("night")}
+          >
+            🌙 Night Mode
+          </button>
+          <button 
+            className="scenario-btn accident"
+            onClick={() => handleScenarioChange("accident")}
+          >
+            🚧 Accident
+          </button>
+          <button 
+            className="scenario-btn parade"
+            onClick={() => handleScenarioChange("parade")}
+          >
+            🎉 Parade
+          </button>
         </div>
       </div>
 

@@ -7,12 +7,34 @@ import "./ControlPanel.css";
 
 const ControlPanel = ({ simulationState, isConnected }) => {
   const [activeTab, setActiveTab] = useState("emergency");
+  const [simulationMode, setSimulationMode] = useState("smart");
   const [config, setConfig] = useState({
     greenDuration: 30,
     vehicleRate: 5,
     emergencyProbability: 2,
     simulationSpeed: 1,
   });
+
+  // Handle mode change with preset configuration
+  const handleModeChange = async (modeId, presetConfig) => {
+    setSimulationMode(modeId);
+    setConfig(presetConfig);
+
+    try {
+      // Update backend with new configuration
+      await simulationService.updateConfig({
+        greenDuration: presetConfig.greenDuration,
+        vehicleRate: presetConfig.vehicleRate,
+      });
+      
+      // Update speed separately
+      await simulationService.setSpeed(presetConfig.simulationSpeed);
+      
+      console.log("Mode changed to:", modeId, "with config:", presetConfig);
+    } catch (error) {
+      console.error("Failed to update config for mode change:", error);
+    }
+  };
 
   const handleConfigUpdate = async (key, value) => {
     const newConfig = { ...config, [key]: value };
@@ -111,6 +133,8 @@ const ControlPanel = ({ simulationState, isConnected }) => {
             config={config}
             onConfigUpdate={handleConfigUpdate}
             onSimulationControl={handleSimulationControl}
+            onModeChange={handleModeChange}
+            simulationMode={simulationMode}
             simulationTime={simulationState?.simulation_time}
           />
         )}
