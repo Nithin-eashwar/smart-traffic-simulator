@@ -157,8 +157,7 @@ async def control_simulation(action: str):
     
     elif action == "reset":
         simulation.reset()
-        simulation.start()
-        return {"success": True, "message": "Simulation reset and started"}
+        return {"success": True, "message": "Simulation reset"}
     
     elif action == "pause":
         simulation.stop()

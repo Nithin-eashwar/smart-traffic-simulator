@@ -11,10 +11,10 @@ const SidePanels = ({ collapsed, onToggle, activeView, onViewChange, onQuickActi
   ];
 
   const quickActions = [
+    { id: "start", icon: "▶️", label: "Start Sim", color: "#2ecc71" },
     { id: "emergency", icon: "🚨", label: "Add Emergency", color: "#e74c3c" },
     { id: "pause", icon: "⏸️", label: "Pause Sim", color: "#f39c12" },
     { id: "reset", icon: "🔁", label: "Reset Sim", color: "#3498db" },
-    { id: "screenshot", icon: "📸", label: "Screenshot", color: "#9b59b6" },
   ];
 
   const systemStatus = [

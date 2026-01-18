@@ -165,23 +165,78 @@ class TrafficSimulationEngine:
         return processed_vehicles
     
     def update_signal(self):
-        """Update traffic signal based on priority queue"""
+        """Update traffic signal based on priority queue and traffic conditions"""
         current_time = datetime.now()
         
-        # Check if current green signal should end
+        # Get current road info
+        current_road = None
+        if self.intersection.current_green:
+            current_road = self.intersection.roads[self.intersection.current_green]
+        
+        # Calculate elapsed time since last switch
+        elapsed = 0
         if self.intersection.current_green:
             elapsed = (current_time - self.intersection.last_switch).seconds
-            if elapsed >= self.green_signal_duration:
+        
+        # Find the road with highest priority (most traffic)
+        highest_priority_road = None
+        highest_priority_score = -float('inf')
+        
+        for road in self.intersection.roads.values():
+            if road.vehicles:
+                # Calculate priority score (density + emergency boost + wait time)
+                score = road.traffic_density
+                emergency_count = sum(1 for v in road.vehicles if v.emergency)
+                score += emergency_count * 100  # Big boost for emergencies
+                max_wait = max(v.waiting_time for v in road.vehicles) if road.vehicles else 0
+                score += max_wait * 0.5
+                
+                if score > highest_priority_score:
+                    highest_priority_score = score
+                    highest_priority_road = road
+        
+        should_switch = False
+        min_green_time = 5  # Minimum time a light stays green (seconds)
+        
+        if self.intersection.current_green:
+            # Condition 1: Current road is empty - switch immediately
+            if not current_road.vehicles and elapsed >= min_green_time:
+                should_switch = True
+            
+            # Condition 2: Max time reached
+            elif elapsed >= self.green_signal_duration:
+                should_switch = True
+            
+            # Condition 3: Another road has MUCH higher priority (preemption)
+            elif highest_priority_road and elapsed >= min_green_time:
+                current_score = current_road.traffic_density if current_road else 0
+                # Preempt if another road has 50% more traffic density
+                if highest_priority_score > current_score * 1.5 + 10:
+                    should_switch = True
+                    
+            # Condition 4: Emergency vehicle preemption
+            if highest_priority_road and elapsed >= min_green_time:
+                has_emergency = any(v.emergency for v in highest_priority_road.vehicles)
+                current_has_emergency = current_road and any(v.emergency for v in current_road.vehicles)
+                if has_emergency and not current_has_emergency:
+                    should_switch = True
+        else:
+            # No current green light - assign one
+            should_switch = True
+        
+        # Perform the switch
+        if should_switch:
+            if self.intersection.current_green:
                 self.intersection.current_green = None
                 self.metrics["signal_changes"] += 1
-        
-        # Assign new green signal
-        if not self.intersection.current_green and not self.priority_queue.is_empty():
-            next_road = self.priority_queue.pop()
-            if next_road and next_road.vehicles:
-                self.intersection.current_green = next_road.direction
+            
+            # Assign to highest priority road
+            if highest_priority_road:
+                self.intersection.current_green = highest_priority_road.direction
                 self.intersection.last_switch = current_time
                 self.metrics["signal_changes"] += 1
+                # Update priority queue
+                self.priority_queue.update_road(highest_priority_road)
     
     def update_metrics(self):
         """Update all simulation metrics"""

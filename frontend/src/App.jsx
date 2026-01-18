@@ -18,6 +18,14 @@ function App() {
   // Handle quick actions from sidebar
   const handleQuickAction = async (action) => {
     switch (action) {
+      case "start":
+        try {
+          await simulationService.controlSimulation("start");
+          console.log("Simulation started");
+        } catch (err) {
+          console.error("Failed to start:", err);
+        }
+        break;
       case "emergency":
         // Add emergency to a random direction
         const directions = [0, 45, 90, 135, 180, 225, 270, 315];

@@ -10,7 +10,6 @@ const Header = ({ isConnected, simulationTime }) => {
           <div className="logo-icon">🚦</div>
           <div className="logo-text">
             <h1>Smart Traffic Control</h1>
-            <p className="logo-subtitle">8-Way Intersection Simulation</p>
           </div>
         </div>
       </div>

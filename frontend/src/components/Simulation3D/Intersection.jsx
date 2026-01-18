@@ -77,9 +77,7 @@ const Intersection = ({ simulationState }) => {
       <mesh position={[0, 0.01, 0]}>
         <cylinderGeometry args={[8, 8, 0.1, 32]} />
         <meshStandardMaterial
-          color={current_green ? "#27ae60" : "#2c3e50"}
-          emissive={current_green ? "#27ae60" : "#000000"}
-          emissiveIntensity={0.3}
+          color="#2c3e50"
           roughness={0.8}
         />
       </mesh>

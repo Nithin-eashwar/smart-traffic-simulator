@@ -164,9 +164,6 @@ const ControlPanel = ({ simulationState, isConnected }) => {
           <button className="quick-btn" title="Reset View">
             🎯
           </button>
-          <button className="quick-btn" title="Take Screenshot">
-            📸
-          </button>
         </div>
         <div className="version-info">v1.0.0 | Smart Traffic Control</div>
       </div>
