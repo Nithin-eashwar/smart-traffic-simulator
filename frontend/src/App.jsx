@@ -263,16 +263,9 @@ function App() {
 
       <footer className="app-footer">
         <div className="footer-info">
-          <span>Smart Traffic Control System v1.0</span>
-          <span>•</span>
-          <span>8-Way Intersection Simulation</span>
-          <span>•</span>
-          <span>Priority Queue Algorithm</span>
-          <span>•</span>
           <span
-            className={`connection-status ${
-              isConnected ? "connected" : "disconnected"
-            }`}
+            className={`connection-status ${isConnected ? "connected" : "disconnected"
+              }`}
           >
             {isConnected ? "🟢 LIVE" : "🔴 OFFLINE"}
           </span>

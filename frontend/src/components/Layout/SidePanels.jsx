@@ -64,9 +64,8 @@ const SidePanels = ({ collapsed, onToggle, activeView, onViewChange, onQuickActi
               {navigationItems.map((item) => (
                 <li key={item.id}>
                   <button
-                    className={`nav-item ${
-                      activeView === item.id ? "active" : ""
-                    }`}
+                    className={`nav-item ${activeView === item.id ? "active" : ""
+                      }`}
                     onClick={() => handleNavigationClick(item.id)}
                   >
                     <span className="nav-icon">{item.icon}</span>
