@@ -1,9 +1,9 @@
 .emergency-controls {
-  padding: 10px 0;
+  padding: 5px 0;
 }
 
 .emergency-header {
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   text-align: center;
 }
 
@@ -22,15 +22,15 @@
 .direction-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 6px;
+  margin-bottom: 12px;
 }
 
 .direction-btn {
   background: rgba(52, 73, 94, 0.8);
   border: 2px solid;
-  border-radius: 10px;
-  padding: 15px 5px;
+  border-radius: 8px;
+  padding: 8px 4px;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
@@ -57,22 +57,22 @@
 }
 
 .direction-arrow {
-  font-size: 1.8rem;
+  font-size: 1.4rem;
   font-weight: bold;
-  height: 40px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .direction-name {
-  font-size: 0.85rem;
+  font-size: 0.7rem;
   font-weight: 600;
   color: #ecf0f1;
 }
 
 .direction-angle {
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   color: #7f8c8d;
 }
 
@@ -92,14 +92,15 @@
 
 .emergency-actions {
   display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
 .emergency-actions .action-btn {
   flex: 1;
-  padding: 12px;
+  padding: 8px;
   font-weight: 600;
+  font-size: 0.85rem;
 }
 
 .action-btn.quick-emergency {
@@ -121,28 +122,29 @@
 .emergency-info {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
 .info-card {
   background: rgba(52, 73, 94, 0.6);
-  border-radius: 8px;
-  padding: 12px;
+  border-radius: 6px;
+  padding: 8px;
   display: flex;
-  gap: 10px;
+  gap: 8px;
   align-items: flex-start;
 }
 
 .info-icon {
-  font-size: 1.2rem;
+  font-size: 1rem;
   background: rgba(255, 255, 255, 0.1);
-  width: 36px;
-  height: 36px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .info-content h4 {
@@ -160,8 +162,8 @@
 
 .emergency-stats {
   background: rgba(52, 73, 94, 0.6);
-  border-radius: 8px;
-  padding: 15px;
+  border-radius: 6px;
+  padding: 10px;
 }
 
 .emergency-stats h4 {

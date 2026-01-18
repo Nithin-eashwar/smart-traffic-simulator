@@ -1,9 +1,6 @@
-import React, { useMemo, useRef } from "react";
-import { useFrame } from "@react-three/fiber";
+import React, { useMemo } from "react";
 
 const Vehicle = ({ position, rotation, type, emergency, waitingTime }) => {
-  const vehicleRef = useRef();
-
   // Vehicle configurations - using simple colors and basic materials
   const vehicleConfig = useMemo(() => {
     const configs = {
@@ -25,16 +22,8 @@ const Vehicle = ({ position, rotation, type, emergency, waitingTime }) => {
     return "#2ecc71";
   }, [waitingTime]);
 
-  // Subtle animation for vehicles
-  useFrame((state) => {
-    if (vehicleRef.current) {
-      const time = state.clock.getElapsedTime();
-      vehicleRef.current.position.y = position[1] + Math.sin(time * 2) * 0.03;
-    }
-  });
-
   return (
-    <group ref={vehicleRef} position={position} rotation={rotation}>
+    <group position={position} rotation={rotation}>
       {/* Main vehicle body */}
       <mesh castShadow>
         <boxGeometry args={[vehicleConfig.width, vehicleConfig.height, vehicleConfig.length]} />
@@ -59,39 +48,39 @@ const Vehicle = ({ position, rotation, type, emergency, waitingTime }) => {
       {/* Emergency lights */}
       {emergency && (
         <mesh position={[0, 0.8, 0]}>
-          <cylinderGeometry args={[0.15, 0.15, 0.3, 8]} />
+          <cylinderGeometry args={[0.15, 0.15, 0.3, 6]} />
           <meshBasicMaterial color="#ff0000" />
         </mesh>
       )}
 
       {/* Waiting time indicator (small sphere above vehicle) */}
       <mesh position={[0, 1, 0]}>
-        <sphereGeometry args={[0.15, 8, 8]} />
+        <sphereGeometry args={[0.15, 6, 6]} />
         <meshBasicMaterial color={priorityColor} />
       </mesh>
 
-      {/* Wheels - front and back */}
+      {/* Simplified wheels - only for larger vehicles */}
       {["car", "truck", "bus", "emergency"].includes(type) && (
         <>
           {/* Front left */}
           <mesh position={[-vehicleConfig.width/2, -0.2, vehicleConfig.length/3]} rotation={[0, 0, Math.PI/2]}>
-            <cylinderGeometry args={[0.25, 0.25, 0.15, 12]} />
-            <meshStandardMaterial color="#1a1a1a" />
+            <cylinderGeometry args={[0.25, 0.25, 0.15, 8]} />
+            <meshBasicMaterial color="#1a1a1a" />
           </mesh>
           {/* Front right */}
           <mesh position={[vehicleConfig.width/2, -0.2, vehicleConfig.length/3]} rotation={[0, 0, Math.PI/2]}>
-            <cylinderGeometry args={[0.25, 0.25, 0.15, 12]} />
-            <meshStandardMaterial color="#1a1a1a" />
+            <cylinderGeometry args={[0.25, 0.25, 0.15, 8]} />
+            <meshBasicMaterial color="#1a1a1a" />
           </mesh>
           {/* Back left */}
           <mesh position={[-vehicleConfig.width/2, -0.2, -vehicleConfig.length/3]} rotation={[0, 0, Math.PI/2]}>
-            <cylinderGeometry args={[0.25, 0.25, 0.15, 12]} />
-            <meshStandardMaterial color="#1a1a1a" />
+            <cylinderGeometry args={[0.25, 0.25, 0.15, 8]} />
+            <meshBasicMaterial color="#1a1a1a" />
           </mesh>
           {/* Back right */}
           <mesh position={[vehicleConfig.width/2, -0.2, -vehicleConfig.length/3]} rotation={[0, 0, Math.PI/2]}>
-            <cylinderGeometry args={[0.25, 0.25, 0.15, 12]} />
-            <meshStandardMaterial color="#1a1a1a" />
+            <cylinderGeometry args={[0.25, 0.25, 0.15, 8]} />
+            <meshBasicMaterial color="#1a1a1a" />
           </mesh>
         </>
       )}

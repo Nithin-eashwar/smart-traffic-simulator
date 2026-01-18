@@ -152,21 +152,6 @@ const ControlPanel = ({ simulationState, isConnected }) => {
           </div>
         )}
       </div>
-
-      <div className="control-footer">
-        <div className="quick-actions">
-          <button className="quick-btn" title="Add Random Emergency">
-            🚨
-          </button>
-          <button className="quick-btn" title="Pause Simulation">
-            ⏸️
-          </button>
-          <button className="quick-btn" title="Reset View">
-            🎯
-          </button>
-        </div>
-        <div className="version-info">v1.0.0 | Smart Traffic Control</div>
-      </div>
     </div>
   );
 };

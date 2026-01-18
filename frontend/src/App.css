@@ -122,7 +122,7 @@
 }
 
 .simulation-controls {
-  max-height: 350px;
+  flex: 1;
   overflow-y: auto;
 }
 
