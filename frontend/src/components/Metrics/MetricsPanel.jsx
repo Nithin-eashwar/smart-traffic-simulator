@@ -6,7 +6,40 @@ import EnvironmentalChart from "./Charts/EnvironmentalChart";
 import Alerts from "./Alerts";
 import "./MetricsPanel.css";
 
-const MetricsPanel = ({ metrics = {} }) => {
+const MetricsPanel = ({ metrics = {}, historicalData = [], roads = {} }) => {
+  // Calculate real trends from historical data
+  const trends = useMemo(() => {
+    if (historicalData.length < 5) {
+      return { waitTime: 0, congestion: 0, throughput: 0 };
+    }
+
+    const recent = historicalData.slice(-5);
+    const older = historicalData.slice(-10, -5);
+
+    if (older.length === 0) {
+      return { waitTime: 0, congestion: 0, throughput: 0 };
+    }
+
+    const avgRecent = (arr, key) => arr.reduce((sum, d) => sum + (d[key] || 0), 0) / arr.length;
+    const avgOlder = (arr, key) => arr.reduce((sum, d) => sum + (d[key] || 0), 0) / arr.length;
+
+    const calcTrend = (key) => {
+      const recentAvg = avgRecent(recent, key);
+      const olderAvg = avgOlder(older, key);
+      if (olderAvg === 0) return 0;
+      return ((recentAvg - olderAvg) / olderAvg) * 100;
+    };
+
+    return {
+      waitTime: calcTrend("avg_wait_time"),
+      congestion: calcTrend("congestion_level"),
+      throughput: calcTrend("throughput"),
+      co2: calcTrend("co2_saved"),
+      fuel: calcTrend("fuel_saved"),
+      vehicles: calcTrend("vehicles_processed"),
+    };
+  }, [historicalData]);
+
   const metricData = useMemo(() => {
     if (!metrics) return [];
 
@@ -18,8 +51,10 @@ const MetricsPanel = ({ metrics = {} }) => {
         unit: "min",
         icon: "⏱️",
         color: "#3498db",
-        trend: -12.5,
-        description: "Reduced by 12.5% compared to fixed timer",
+        trend: trends.waitTime,
+        description: trends.waitTime < 0
+          ? `Reduced by ${Math.abs(trends.waitTime).toFixed(1)}% recently`
+          : `Increased by ${trends.waitTime.toFixed(1)}% recently`,
       },
       {
         key: "congestion_level",
@@ -28,7 +63,7 @@ const MetricsPanel = ({ metrics = {} }) => {
         unit: "%",
         icon: "🚗",
         color: "#2ecc71",
-        trend: -8.3,
+        trend: trends.congestion,
         description: "Overall traffic density",
       },
       {
@@ -38,8 +73,8 @@ const MetricsPanel = ({ metrics = {} }) => {
         unit: "served",
         icon: "🚨",
         color: "#e74c3c",
-        trend: 45,
-        description: "Prioritized in last hour",
+        trend: 0,
+        description: "Prioritized in simulation",
       },
       {
         key: "throughput",
@@ -48,7 +83,7 @@ const MetricsPanel = ({ metrics = {} }) => {
         unit: "veh/hr",
         icon: "📊",
         color: "#9b59b6",
-        trend: 15.2,
+        trend: trends.throughput,
         description: "Vehicles processed per hour",
       },
       {
@@ -58,7 +93,7 @@ const MetricsPanel = ({ metrics = {} }) => {
         unit: "kg",
         icon: "🌱",
         color: "#1abc9c",
-        trend: 18.7,
+        trend: trends.co2 || 0,
         description: "Emissions reduced",
       },
       {
@@ -68,31 +103,11 @@ const MetricsPanel = ({ metrics = {} }) => {
         unit: "L",
         icon: "⛽",
         color: "#f39c12",
-        trend: 22.3,
+        trend: trends.fuel || 0,
         description: "Fuel consumption reduced",
       },
-      {
-        key: "vehicles_processed",
-        label: "Vehicles Processed",
-        value: metrics.vehicles_processed || 0,
-        unit: "",
-        icon: "🚘",
-        color: "#3498db",
-        trend: 8.9,
-        description: "Total vehicles cleared",
-      },
-      {
-        key: "signal_changes",
-        label: "Signal Changes",
-        value: metrics.signal_changes || 0,
-        unit: "",
-        icon: "🚦",
-        color: "#2ecc71",
-        trend: -5.4,
-        description: "Traffic signal changes",
-      },
     ];
-  }, [metrics]);
+  }, [metrics, trends]);
 
   const systemHealth = useMemo(() => {
     const congestion = metrics.congestion_level || 0;
@@ -147,13 +162,13 @@ const MetricsPanel = ({ metrics = {} }) => {
 
       <div className="charts-section">
         <div className="chart-container">
-          <WaitTimeChart metricsHistory={[]} />
+          <WaitTimeChart metricsHistory={historicalData} />
         </div>
         <div className="chart-container">
-          <DensityChart roads={{}} />
+          <DensityChart roads={roads} />
         </div>
         <div className="chart-container full-width">
-          <EnvironmentalChart metricsHistory={[]} />
+          <EnvironmentalChart metricsHistory={historicalData} />
         </div>
       </div>
 

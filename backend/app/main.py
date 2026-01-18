@@ -73,8 +73,9 @@ async def run_simulation_background():
                         except ValueError:
                             pass
             
-            # Sleep for 1 second (real time)
-            await asyncio.sleep(1)
+            # Sleep based on simulation speed (faster speed = shorter delay)
+            delay = 1.0 / simulation.simulation_speed if simulation else 1.0
+            await asyncio.sleep(delay)
             
         except asyncio.CancelledError:
             break
@@ -166,6 +167,18 @@ async def control_simulation(action: str):
     else:
         raise HTTPException(status_code=400, detail=f"Unknown action: {action}")
 
+@app.post("/speed/{multiplier}")
+async def set_simulation_speed(multiplier: float):
+    """Set simulation speed (0.5 to 5.0)"""
+    if simulation:
+        new_speed = simulation.set_speed(multiplier)
+        return {
+            "success": True,
+            "speed": new_speed,
+            "message": f"Simulation speed set to {new_speed}x"
+        }
+    raise HTTPException(status_code=404, detail="Simulation not initialized")
+
 @app.get("/history")
 async def get_history(limit: int = 50):
     """Get simulation history data"""
@@ -200,6 +213,69 @@ async def get_road_state(direction: int):
         except ValueError:
             raise HTTPException(status_code=400, detail=f"Invalid direction: {direction}")
     raise HTTPException(status_code=404, detail="Simulation not initialized")
+
+@app.post("/road/{direction}/{action}")
+async def road_control(direction: int, action: str):
+    """Control a specific road: priority, clear, or add vehicles"""
+    if not simulation:
+        raise HTTPException(status_code=404, detail="Simulation not initialized")
+    
+    try:
+        road_dir = RoadDirection(direction)
+        road = simulation.intersection.roads.get(road_dir)
+        
+        if not road:
+            raise HTTPException(status_code=404, detail=f"Road direction {direction} not found")
+        
+        action = action.lower()
+        
+        if action == "priority":
+            # Force this road to get green signal
+            simulation.intersection.current_green = road_dir
+            simulation.metrics["signal_changes"] += 1
+            return {
+                "success": True,
+                "action": "priority",
+                "direction": direction,
+                "message": f"Priority given to {road.name} road"
+            }
+        
+        elif action == "clear":
+            # Clear vehicles from this road
+            cleared_count = len(road.vehicles)
+            road.vehicles.clear()
+            road.update_density()
+            return {
+                "success": True,
+                "action": "clear",
+                "direction": direction,
+                "cleared": cleared_count,
+                "message": f"Cleared {cleared_count} vehicles from {road.name} road"
+            }
+        
+        elif action == "add":
+            # Add a few vehicles to this road
+            added = 0
+            for _ in range(3):  # Add 3 vehicles
+                if len(road.vehicles) < road.max_capacity:
+                    vehicle = simulation.generate_vehicle()
+                    road.vehicles.append(vehicle)
+                    simulation.metrics["total_vehicles_generated"] += 1
+                    added += 1
+            road.update_density()
+            return {
+                "success": True,
+                "action": "add",
+                "direction": direction,
+                "added": added,
+                "message": f"Added {added} vehicles to {road.name} road"
+            }
+        
+        else:
+            raise HTTPException(status_code=400, detail=f"Unknown action: {action}. Use 'priority', 'clear', or 'add'")
+            
+    except ValueError:
+        raise HTTPException(status_code=400, detail=f"Invalid direction: {direction}")
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):

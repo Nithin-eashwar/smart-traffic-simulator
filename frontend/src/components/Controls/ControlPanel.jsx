@@ -17,8 +17,15 @@ const ControlPanel = ({ simulationState, isConnected }) => {
   const handleConfigUpdate = async (key, value) => {
     const newConfig = { ...config, [key]: value };
     setConfig(newConfig);
-    
+
     try {
+      // Handle speed separately
+      if (key === "simulationSpeed") {
+        await simulationService.setSpeed(value);
+        console.log("Speed updated to:", value);
+        return;
+      }
+
       // Call the backend API to update configuration
       await simulationService.updateConfig({
         greenDuration: newConfig.greenDuration,
@@ -40,9 +47,13 @@ const ControlPanel = ({ simulationState, isConnected }) => {
     }
   };
 
-  const handleRoadControl = (direction, action) => {
-    console.log(`${action} road ${direction}`);
-    // Road-specific controls not implemented in backend yet
+  const handleRoadControl = async (direction, action) => {
+    try {
+      const result = await simulationService.roadControl(direction, action);
+      console.log(`Road control: ${action} on direction ${direction}`, result);
+    } catch (error) {
+      console.error("Failed to control road:", error);
+    }
   };
 
   const handleSimulationControl = async (action) => {
@@ -59,7 +70,6 @@ const ControlPanel = ({ simulationState, isConnected }) => {
     { id: "emergency", label: "🚨 Emergency", icon: "🚨" },
     { id: "simulation", label: "⚙️ Simulation", icon: "⚙️" },
     { id: "roads", label: "🛣️ Roads", icon: "🛣️" },
-    { id: "system", label: "📊 System", icon: "📊" },
   ];
 
   return (
@@ -68,9 +78,8 @@ const ControlPanel = ({ simulationState, isConnected }) => {
         <h2>Control Panel</h2>
         <div className="connection-status">
           <div
-            className={`status-dot ${
-              isConnected ? "connected" : "disconnected"
-            }`}
+            className={`status-dot ${isConnected ? "connected" : "disconnected"
+              }`}
           />
           <span>{isConnected ? "Connected" : "Disconnected"}</span>
         </div>
@@ -112,44 +121,6 @@ const ControlPanel = ({ simulationState, isConnected }) => {
             currentGreen={simulationState?.current_green}
             onRoadControl={handleRoadControl}
           />
-        )}
-
-        {activeTab === "system" && (
-          <div className="system-controls">
-            <h3>System Status</h3>
-            <div className="system-info">
-              <div className="info-item">
-                <span className="info-label">Simulation Time:</span>
-                <span className="info-value">
-                  {simulationState?.simulation_time || 0} minutes
-                </span>
-              </div>
-              <div className="info-item">
-                <span className="info-label">Vehicles Processed:</span>
-                <span className="info-value">
-                  {simulationState?.metrics?.vehicles_processed || 0}
-                </span>
-              </div>
-              <div className="info-item">
-                <span className="info-label">Signal Changes:</span>
-                <span className="info-value">
-                  {simulationState?.metrics?.signal_changes || 0}
-                </span>
-              </div>
-              <div className="info-item">
-                <span className="info-label">Queue Size:</span>
-                <span className="info-value">
-                  {simulationState?.queue_size || 0}
-                </span>
-              </div>
-            </div>
-
-            <div className="system-actions">
-              <button className="action-btn restart">🔄 Restart System</button>
-              <button className="action-btn reset">♻️ Reset Data</button>
-              <button className="action-btn export">📤 Export Logs</button>
-            </div>
-          </div>
         )}
       </div>
     </div>

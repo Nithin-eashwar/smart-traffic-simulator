@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { useSimulation } from "./hooks/useSimulation";
+import { useMetrics } from "./hooks/useMetrics";
 import Intersection from "./components/Simulation3D/Intersection";
 import MetricsPanel from "./components/Metrics/MetricsPanel";
 import ControlPanel from "./components/Controls/ControlPanel";
@@ -12,6 +13,7 @@ import "./App.css";
 
 function App() {
   const { simulationState, isConnected, loading, error } = useSimulation();
+  const { historicalData } = useMetrics(simulationState?.metrics || {});
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [activeView, setActiveView] = useState("dashboard");
 
@@ -187,7 +189,11 @@ function App() {
       case "analytics":
         return (
           <div className="analytics-view">
-            <MetricsPanel metrics={simulationState?.metrics} />
+            <MetricsPanel
+              metrics={simulationState?.metrics}
+              historicalData={historicalData}
+              roads={simulationState?.roads || {}}
+            />
           </div>
         );
 
@@ -197,39 +203,15 @@ function App() {
             <div className="placeholder-content">
               <span className="placeholder-icon">📋</span>
               <h2>Reports</h2>
-              <p>Traffic reports and historical data will be available here.</p>
+              <p>View traffic performance data and simulation summaries.</p>
               <div className="report-summary">
-                <h3>Quick Stats</h3>
+                <h3>Session Summary</h3>
                 <ul>
                   <li>Total Simulation Time: {simulationState?.simulation_time || 0} minutes</li>
                   <li>Total Vehicles Processed: {simulationState?.metrics?.vehicles_processed || 0}</li>
                   <li>CO2 Saved: {simulationState?.metrics?.co2_saved?.toFixed(1) || 0} kg</li>
                   <li>Fuel Saved: {simulationState?.metrics?.fuel_saved?.toFixed(1) || 0} L</li>
                 </ul>
-              </div>
-            </div>
-          </div>
-        );
-
-      case "settings":
-        return (
-          <div className="settings-view">
-            <div className="placeholder-content">
-              <span className="placeholder-icon">⚙️</span>
-              <h2>Settings</h2>
-              <p>Configure your traffic control system preferences.</p>
-              <div className="settings-section">
-                <h3>Simulation Settings</h3>
-                <div className="setting-item">
-                  <label>Green Signal Duration</label>
-                  <span>{simulationState?.green_duration || 30}s</span>
-                </div>
-                <div className="setting-item">
-                  <label>System Status</label>
-                  <span className={isConnected ? "status-on" : "status-off"}>
-                    {isConnected ? "Online" : "Offline"}
-                  </span>
-                </div>
               </div>
             </div>
           </div>
@@ -245,6 +227,7 @@ function App() {
       <Header
         isConnected={isConnected}
         simulationTime={simulationState?.simulation_time}
+        simulationSpeed={simulationState?.simulation_speed}
       />
 
       <div className="main-content">
@@ -254,6 +237,8 @@ function App() {
           activeView={activeView}
           onViewChange={setActiveView}
           onQuickAction={handleQuickAction}
+          isConnected={isConnected}
+          simulationState={simulationState}
         />
 
         <div className={`content-area ${sidebarCollapsed ? "expanded" : ""}`}>
@@ -263,11 +248,8 @@ function App() {
 
       <footer className="app-footer">
         <div className="footer-info">
-          <span
-            className={`connection-status ${isConnected ? "connected" : "disconnected"
-              }`}
-          >
-            {isConnected ? "🟢 LIVE" : "🔴 OFFLINE"}
+          <span className="copyright">
+            © 2026 Smart Traffic Control System. All rights reserved.
           </span>
         </div>
       </footer>

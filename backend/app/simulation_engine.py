@@ -16,6 +16,7 @@ class TrafficSimulationEngine:
         self.simulation_time = 0  # in simulation minutes
         self.is_running = False
         self.real_time_factor = 60  # 1 real second = 60 simulation minutes
+        self.simulation_speed = 1.0  # Speed multiplier (0.5x, 1x, 2x)
         
         self.metrics = {
             "total_vehicles_generated": 0,
@@ -335,7 +336,8 @@ class TrafficSimulationEngine:
             "roads": roads_state,
             "metrics": self.metrics.copy(),
             "queue_size": self.metrics["queue_size"],
-            "is_running": self.is_running
+            "is_running": self.is_running,
+            "simulation_speed": self.simulation_speed
         }
     
     def add_emergency_vehicle(self, direction_angle: int) -> bool:
@@ -380,6 +382,11 @@ class TrafficSimulationEngine:
             (VehicleType.BICYCLE, 0.10),
             (VehicleType.EMERGENCY, self.emergency_probability)
         ]
+    
+    def set_speed(self, speed: float):
+        """Set simulation speed multiplier (0.5 to 5.0)"""
+        self.simulation_speed = max(0.5, min(5.0, speed))
+        return self.simulation_speed
     
     def start(self):
         """Start the simulation"""

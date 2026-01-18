@@ -181,6 +181,52 @@ class SimulationService {
     }
   }
 
+  async setSpeed(multiplier) {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/speed/${multiplier}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Failed to set simulation speed:", error);
+      throw error;
+    }
+  }
+
+  async roadControl(direction, action) {
+    try {
+      const response = await fetch(
+        `http://localhost:8000/road/${direction}/${action}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Failed to control road:", error);
+      throw error;
+    }
+  }
+
   subscribe(listener) {
     this.listeners.add(listener);
     return () => this.listeners.delete(listener);

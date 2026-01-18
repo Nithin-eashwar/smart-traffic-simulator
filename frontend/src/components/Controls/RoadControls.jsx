@@ -139,30 +139,6 @@ const RoadControls = ({ roads, currentGreen, onRoadControl }) => {
         })}
       </div>
 
-      <div className="global-controls">
-        <h4>Global Road Actions</h4>
-        <div className="global-actions">
-          <button
-            className="global-btn clear-all"
-            onClick={() => handleAllRoadsAction("clearAll")}
-          >
-            🧹 Clear All Roads
-          </button>
-          <button
-            className="global-btn reset-all"
-            onClick={() => handleAllRoadsAction("resetAll")}
-          >
-            🔄 Reset All
-          </button>
-          <button
-            className="global-btn optimize"
-            onClick={() => handleAllRoadsAction("optimize")}
-          >
-            ⚡ Optimize All
-          </button>
-        </div>
-      </div>
-
       <div className="road-summary">
         <div className="summary-item">
           <div className="summary-icon">🚗</div>

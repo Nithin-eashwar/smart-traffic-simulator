@@ -2,7 +2,14 @@ import React from "react";
 import { formatSimulationTime } from "../../utils/calculations";
 import "./Header.css";
 
-const Header = ({ isConnected, simulationTime }) => {
+const Header = ({ isConnected, simulationTime, simulationSpeed = 1 }) => {
+  // Calculate the real-time scale display
+  const getScaleDisplay = () => {
+    if (simulationSpeed === 1) return "1s = 1min";
+    if (simulationSpeed < 1) return `1s = ${simulationSpeed}min`;
+    return `1s = ${simulationSpeed}min`;
+  };
+
   return (
     <header className="app-header">
       <div className="header-left">
@@ -30,7 +37,7 @@ const Header = ({ isConnected, simulationTime }) => {
             <div className="info-icon">🚗</div>
             <div className="info-content">
               <div className="info-label">Real-time Scale</div>
-              <div className="info-value">1s = 1min</div>
+              <div className="info-value">{getScaleDisplay()}</div>
             </div>
           </div>
         </div>
@@ -39,9 +46,8 @@ const Header = ({ isConnected, simulationTime }) => {
       <div className="header-right">
         <div className="connection-status">
           <div
-            className={`status-indicator ${
-              isConnected ? "connected" : "disconnected"
-            }`}
+            className={`status-indicator ${isConnected ? "connected" : "disconnected"
+              }`}
           />
           <div className="status-text">
             <span className="status-label">
@@ -54,10 +60,10 @@ const Header = ({ isConnected, simulationTime }) => {
         </div>
 
         <div className="user-menu">
-          <div className="user-avatar">TC</div>
+          <div className="user-avatar">🎛️</div>
           <div className="user-info">
-            <span className="user-name">Traffic Control</span>
-            <span className="user-role">Administrator</span>
+            <span className="user-name">Control Center</span>
+            <span className="user-role">v1.0.0</span>
           </div>
         </div>
       </div>

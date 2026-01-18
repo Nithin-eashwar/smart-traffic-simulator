@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import "./EmergencyControls.css";
 
 const EmergencyControls = ({ currentGreen, onAddEmergency }) => {
+  const [loading, setLoading] = useState(null); // Track which button is loading
+  const [recentActions, setRecentActions] = useState([]);
+  const [lastSuccess, setLastSuccess] = useState(null);
+
   const directions = [
     { angle: 0, name: "NORTH", arrow: "↑", color: "#3498db" },
     { angle: 45, name: "NORTHEAST", arrow: "↗", color: "#2ecc71" },
@@ -13,17 +17,43 @@ const EmergencyControls = ({ currentGreen, onAddEmergency }) => {
     { angle: 315, name: "NORTHWEST", arrow: "↖", color: "#7f8c8d" },
   ];
 
-  const handleEmergencyClick = (direction) => {
+  const handleEmergencyClick = async (direction) => {
     if (onAddEmergency) {
-      onAddEmergency(direction.angle);
+      setLoading(direction.angle);
+      try {
+        await onAddEmergency(direction.angle);
+        // Show success feedback
+        setLastSuccess(direction.angle);
+        setTimeout(() => setLastSuccess(null), 2000);
+
+        // Add to recent actions
+        const newAction = {
+          id: Date.now(),
+          time: "Just now",
+          action: `Emergency added to ${direction.name}`,
+        };
+        setRecentActions(prev => [newAction, ...prev].slice(0, 5));
+      } catch (error) {
+        console.error("Failed to add emergency:", error);
+      } finally {
+        setLoading(null);
+      }
     }
   };
 
-  const handleQuickEmergency = () => {
-    // Add emergency to the most congested direction
-    const randomDirection =
-      directions[Math.floor(Math.random() * directions.length)];
-    onAddEmergency(randomDirection.angle);
+  const handleQuickEmergency = async () => {
+    const randomDirection = directions[Math.floor(Math.random() * directions.length)];
+    await handleEmergencyClick(randomDirection);
+  };
+
+  const handleClearAll = () => {
+    setRecentActions([]);
+    // Add a "cleared" action to show feedback
+    setRecentActions([{
+      id: Date.now(),
+      time: "Just now",
+      action: "All emergencies cleared",
+    }]);
   };
 
   return (
@@ -39,16 +69,17 @@ const EmergencyControls = ({ currentGreen, onAddEmergency }) => {
         {directions.map((dir) => (
           <button
             key={dir.angle}
-            className={`direction-btn ${
-              currentGreen === dir.angle ? "active-green" : ""
-            }`}
+            className={`direction-btn ${currentGreen === dir.angle ? "active-green" : ""
+              } ${loading === dir.angle ? "loading" : ""} ${lastSuccess === dir.angle ? "success" : ""
+              }`}
             onClick={() => handleEmergencyClick(dir)}
+            disabled={loading !== null}
             style={{ borderColor: dir.color }}
             title={`Add emergency vehicle from ${dir.name}`}
           >
             <div className="direction-content">
               <div className="direction-arrow" style={{ color: dir.color }}>
-                {dir.arrow}
+                {loading === dir.angle ? "⏳" : dir.arrow}
               </div>
               <div className="direction-name">{dir.name}</div>
               <div className="direction-angle">{dir.angle}°</div>
@@ -58,21 +89,11 @@ const EmergencyControls = ({ currentGreen, onAddEmergency }) => {
                 <div className="green-pulse"></div>
               </div>
             )}
+            {lastSuccess === dir.angle && (
+              <div className="success-indicator">✓</div>
+            )}
           </button>
         ))}
-      </div>
-
-      <div className="emergency-actions">
-        <button
-          className="action-btn quick-emergency"
-          onClick={handleQuickEmergency}
-        >
-          🚨 Quick Emergency
-        </button>
-
-        <button className="action-btn clear-all">
-          🗑️ Clear All Emergencies
-        </button>
       </div>
 
       <div className="emergency-info">
@@ -91,7 +112,7 @@ const EmergencyControls = ({ currentGreen, onAddEmergency }) => {
           <div className="info-icon">🎯</div>
           <div className="info-content">
             <h4>Priority System</h4>
-            <p>Emergency Public Transport Regular Vehicles</p>
+            <p>Emergency → Public Transport → Regular Vehicles</p>
           </div>
         </div>
       </div>
@@ -99,18 +120,18 @@ const EmergencyControls = ({ currentGreen, onAddEmergency }) => {
       <div className="emergency-stats">
         <h4>Recent Emergency Actions</h4>
         <div className="stats-list">
-          <div className="stat-item">
-            <span className="stat-time">2 min ago</span>
-            <span className="stat-action">Emergency added to NORTH</span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-time">5 min ago</span>
-            <span className="stat-action">Emergency cleared from EAST</span>
-          </div>
-          <div className="stat-item">
-            <span className="stat-time">8 min ago</span>
-            <span className="stat-action">Priority override activated</span>
-          </div>
+          {recentActions.length === 0 ? (
+            <div className="stat-item empty">
+              <span className="stat-action">No recent actions</span>
+            </div>
+          ) : (
+            recentActions.map((action) => (
+              <div key={action.id} className="stat-item new">
+                <span className="stat-time">{action.time}</span>
+                <span className="stat-action">{action.action}</span>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>

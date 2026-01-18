@@ -1,13 +1,12 @@
 import React from "react";
 import "./SidePanels.css";
 
-const SidePanels = ({ collapsed, onToggle, activeView, onViewChange, onQuickAction }) => {
+const SidePanels = ({ collapsed, onToggle, activeView, onViewChange, onQuickAction, isConnected, simulationState }) => {
   const navigationItems = [
     { id: "dashboard", icon: "📊", label: "Dashboard" },
     { id: "simulation", icon: "🚦", label: "Simulation" },
     { id: "analytics", icon: "📈", label: "Analytics" },
     { id: "reports", icon: "📋", label: "Reports" },
-    { id: "settings", icon: "⚙️", label: "Settings" },
   ];
 
   const quickActions = [
@@ -17,11 +16,13 @@ const SidePanels = ({ collapsed, onToggle, activeView, onViewChange, onQuickActi
     { id: "reset", icon: "🔁", label: "Reset Sim", color: "#3498db" },
   ];
 
+  // Dynamic system status based on actual props
+  const roadCount = simulationState?.roads ? Object.keys(simulationState.roads).length : 0;
   const systemStatus = [
-    { label: "AI Controller", status: "active", value: "Running" },
-    { label: "Sensors", status: "active", value: "8/8 Active" },
-    { label: "Database", status: "active", value: "Connected" },
-    { label: "Network", status: "active", value: "Stable" },
+    { label: "AI Controller", status: isConnected ? "active" : "inactive", value: isConnected ? "Running" : "Offline" },
+    { label: "Roads Active", status: roadCount > 0 ? "active" : "inactive", value: `${roadCount}/8 Active` },
+    { label: "Database", status: isConnected ? "active" : "inactive", value: isConnected ? "Connected" : "Disconnected" },
+    { label: "Network", status: isConnected ? "active" : "inactive", value: isConnected ? "Stable" : "No Connection" },
   ];
 
   const handleNavigationClick = (itemId) => {
